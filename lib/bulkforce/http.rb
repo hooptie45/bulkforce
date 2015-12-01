@@ -65,9 +65,7 @@ class Bulkforce
     end
 
     def process_http_request(r)
-      http = Net::HTTP.new(r.host, 443)
-      http.use_ssl = true
-      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      http = http_client(r.host)
       http_request = Net::HTTP.
       const_get(r.http_method.capitalize).
         new(r.path, r.headers)
@@ -76,6 +74,30 @@ class Bulkforce
     end
 
     private
+
+    def http_client(host)
+      if proxy = Bulkforce.configuration.proxy
+        proxy_uri = URI(proxy)
+        proxy_host, proxy_port = proxy_uri.host, proxy_uri.port
+        proxy_username = Bulkforce.configuration.proxy_username
+        proxy_username = Bulkforce.configuration.proxy_password
+      else
+        proxy_username = proxy_password = proxy_host = proxy_host = proxy_port = nil
+      end
+
+      Net::HTTP.new(
+        host,
+        443,
+        proxy_host,
+        proxy_port,
+        proxy_username,
+        proxy_password
+      ).tap do |http|
+        http.use_ssl = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      end
+    end
+
     def nori
       Nori.new(
         :advanced_typecasting => true,

@@ -8,12 +8,28 @@ describe Bulkforce::Configuration do
     include_examples "configuration settings", name: :api_version, expected_default: "33.0", env_variable: "SALESFORCE_API_VERSION"
   end
 
+  context "api_version" do
+    include_examples "configuration settings", name: :api_version, expected_default: "33.0", env_variable: "SALESFORCE_API_VERSION"
+  end
+
   context "username" do
     include_examples "configuration settings", name: :username, expected_default: nil, env_variable: "SALESFORCE_USERNAME"
   end
 
   context "password" do
     include_examples "configuration settings", name: :password, expected_default: nil, env_variable: "SALESFORCE_PASSWORD"
+  end
+
+  context "proxy" do
+    include_examples "configuration settings", name: :proxy, expected_default: nil, env_variable: "SALESFORCE_PROXY"
+  end
+
+  context "proxy_username" do
+    include_examples "configuration settings", name: :proxy_username, expected_default: nil, env_variable: "SALESFORCE_PROXY_USERNAME"
+  end
+
+  context "proxy_password" do
+    include_examples "configuration settings", name: :proxy_password, expected_default: nil, env_variable: "SALESFORCE_PROXY_PASSWORD"
   end
 
   context "security_token" do

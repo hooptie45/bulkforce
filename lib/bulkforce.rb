@@ -11,12 +11,21 @@ class Bulkforce
   SALESFORCE_API_VERSION = "33.0"
 
   class << self
-    attr_accessor :configuration
+
+    attr_writer :configuration
+
+    def configuration
+      @configuration ||= Configuration.new
+    end
+
+    def configure
+      yield configuration
+    end
+
   end
 
   def initialize(options = {})
-    configuration = self.class.configuration || Configuration.new
-    merged_opts = configuration.to_h.merge(options)
+    merged_opts = self.class.configuration.to_h.merge(options)
 
     unless merged_opts[:host] =~ /salesforce.com\/?$/
       warn("WARNING: You are submitting credentials to a host other than salesforce.com")
@@ -55,11 +64,6 @@ class Bulkforce
     @connection.close_job job_id
     batch_reference = Bulkforce::Batch.new @connection, job_id, batch_id
     batch_reference.final_status
-  end
-
-  def self.configure(&block)
-    self.configuration = Configuration.new
-    block.call(self.configuration)
   end
 
   private

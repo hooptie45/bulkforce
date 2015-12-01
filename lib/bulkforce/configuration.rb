@@ -10,6 +10,10 @@ class Bulkforce
     attr_accessor :client_id
     attr_accessor :client_secret
     attr_accessor :refresh_token
+    attr_accessor :proxy
+    attr_accessor :proxy_username
+    attr_accessor :proxy_password
+    attr_accessor :oauth_token
 
     def initialize
       @api_version = ENV["SALESFORCE_API_VERSION"] || "33.0"
@@ -22,6 +26,9 @@ class Bulkforce
       @client_id = ENV["SALESFORCE_CLIENT_ID"]
       @client_secret = ENV["SALESFORCE_CLIENT_SECRET"]
       @refresh_token = ENV["SALESFORCE_REFRESH_TOKEN"]
+      @proxy = ENV["SALESFORCE_PROXY"]
+      @proxy_username = ENV["SALESFORCE_PROXY_USERNAME"]
+      @proxy_password = ENV["SALESFORCE_PROXY_PASSWORD"]
     end
 
     def to_h
